@@ -6,6 +6,7 @@ export class Home extends AppPage {
     public pagePath = '/';
     
     private homePageId = this.page.locator('//body[contains(@class, "home page")]//a[@rel = "home"]')
+    private loginButton = this.page.locator('//a[contains(@class, "btn-lg") and text() = "Login"]')
 
     @step()
     async expectLoaded(message = 'Expected Home page to be opened') {
