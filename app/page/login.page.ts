@@ -1,11 +1,10 @@
 import { expect, test } from "@playwright/test";
-import { Page } from "@playwright/test";
+import { AppPage } from "../abstractClasses";
+import { step } from "../../misc/reporters/step";
 
-export default class Login {
-   
-    constructor(public page: Page) {
-        this.page = page;
-      }
+
+export class Login extends AppPage {
+    public pagePath = ''
 
     private accountNameInput = this.page.locator('//input[@name = "login"]');
     private agentNameInput = this.page.locator('//input[@name = "agentName"]');
@@ -14,6 +13,7 @@ export default class Login {
     private warningMessage = this.page.locator('//div[contains(@class, "SnackbarContainer")]//div[@id="notistack-snackbar"]//div[@data-test-id = "notification-message" and text() = "Something went wrong, check the entered data"]')
 
 
+    @step()
     async expectLoaded() {
         await expect(this.accountNameInput).toBeVisible();
         await expect(this.agentNameInput).toBeVisible();
@@ -22,6 +22,7 @@ export default class Login {
     }
 
 
+    @step()
     async submitLoggin(options: { accountName: string, agentName: string, password: string }) {
         await this.expectLoaded();
         await this.accountNameInput.fill(options.accountName);
@@ -31,8 +32,8 @@ export default class Login {
     }
 
 
-    async submitLogginWithIncorrectData(options: { accountName: string, agentName: string, password: string }) {
-        await this.submitLoggin(options)
+    @step()
+    async expectWarningMessage() {
         await expect(this.warningMessage).toBeVisible()
 }
 }
